@@ -1,5 +1,8 @@
 package sample;
 
+import javafx.scene.Group;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -7,6 +10,7 @@ import org.json.simple.parser.JSONParser;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -40,9 +44,8 @@ public class Simulation {
     }
 
     //Ezt hívd meg, ha el akarod indítani a szimulációt
-    public static void simulate(File productFile, File lineFile,int NUM, int speed)throws Exception{
+    public static void simulate(File productFile, File lineFile,int NUM, int speed, Display display)throws Exception{
         //NUM- hány darab terméket készítsünk
-        //speed- a szimuláció gyorsasága, 1 jelenti a valós idejűt, a nagyobb számok gyorsabb, a kisebbek lassabb szimulációt jelentenek
         Product product=parseProduct(productFile);
         ProductionLine line=parseProdLine(lineFile,speed);
         if(line.verifyLine(product)){
@@ -53,6 +56,15 @@ public class Simulation {
 
             //a gépeken fordított sorrendben haladunk végig, így biztos nem lesz false negatív indításunk
             int limit=line.usedRobots.size()-1;
+
+            //megjelenítés
+//            Display display = new Display(stage);
+//            display = new Display(stage);
+            for (Robot r : line.usedRobots){
+                display.addStations(r.getId());
+            }
+            display.displayRectangles();
+
             while(done<NUM){
                 for (int i =limit ; i >-1 ; --i) {
                     Robot r=line.usedRobots.get(i);
@@ -63,6 +75,8 @@ public class Simulation {
                         pool.execute(r);
                         System.out.println(r.getId()+" started execution");
                     }
+                    display.changeColor(i, r.isRunning());
+
                 }
                 done=line.usedRobots.get(limit).getCounter();
                 System.out.println(done);

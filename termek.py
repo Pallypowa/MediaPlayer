@@ -1,6 +1,6 @@
 import json
 
-class Product:
+class sample.Product:
     def __init__(self,name, id,needs):
         self.name=name
         self.id=id
@@ -17,4 +17,4 @@ while s:
     needs.append(s)
     s=input()
 f=open(id+".json","w")
-f.write(json.dumps(Product(name,id,needs).__dict__))
+f.write(json.dumps(sample.Product(name,id,needs).__dict__))

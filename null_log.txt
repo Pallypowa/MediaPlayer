@@ -1,0 +1,4 @@
+Starting
+Finished, Number of finished products: 1Starting
+Finished, Number of finished products: 2Starting
+Finished, Number of finished products: 3
